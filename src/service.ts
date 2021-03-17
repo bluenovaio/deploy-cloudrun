@@ -19,6 +19,11 @@ import { get, merge, cloneDeep } from 'lodash';
 import fs from 'fs';
 import YAML from 'yaml';
 
+export enum Action {
+  Delete = 'delete',
+  Deploy = 'deploy',
+}
+
 /**
  * Available options to create the Service.
  *
@@ -28,7 +33,7 @@ import YAML from 'yaml';
  * @param yaml Path to YAML file.
  */
 export type ServiceOptions = {
-  action: 'deploy' | 'delete';
+  action: Action;
   image?: string;
   name?: string;
   envVars?: string;

@@ -16,10 +16,7 @@
 
 import * as core from '@actions/core';
 import { CloudRun } from './cloudRun';
-import { Service } from './service';
-
-const ACTION_DEPLOY = 'deploy';
-const ACTION_DELETE = 'delete';
+import { Action, Service } from './service';
 
 /**
  * Executes the main action. It includes the main business logic and is the
@@ -34,10 +31,10 @@ async function run(): Promise<void> {
     const yaml = core.getInput('metadata');
     const credentials = core.getInput('credentials');
     const projectId = core.getInput('project_id');
-    const action = core.getInput('action') || 'deploy';
+    const action = (core.getInput('action') || 'deploy') as Action;
     const region = core.getInput('region') || 'us-central1';
 
-    if (![ACTION_DELETE, ACTION_DEPLOY].includes(action)) {
+    if (!Object.values(Action).includes(action)) {
       throw new Error(`Invalid action: ${action}`);
     }
 
@@ -45,10 +42,16 @@ async function run(): Promise<void> {
     const client = new CloudRun(region, { projectId, credentials });
 
     // Initialize service
-    const service = new Service({ image, name, envVars, yaml });
+    const service = new Service({
+      action,
+      image,
+      name,
+      envVars,
+      yaml,
+    });
 
     let url = null;
-    if (action === ACTION_DELETE) {
+    if (action === Action.Delete) {
       await client.delete(service);
     } else {
       // Deploy service
@@ -58,6 +61,7 @@ async function run(): Promise<void> {
     // Set URL as output
     core.setOutput('url', url);
   } catch (error) {
+    core.info(JSON.stringify(error));
     core.setFailed(error.message);
   }
 }
