@@ -61,7 +61,7 @@ async function run(): Promise<void> {
     // Set URL as output
     core.setOutput('url', url);
   } catch (error) {
-    core.info(JSON.stringify(error));
+    core.info(JSON.stringify(Object.keys(error)));
     core.setFailed(error.message);
   }
 }
