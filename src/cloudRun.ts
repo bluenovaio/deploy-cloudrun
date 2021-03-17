@@ -214,6 +214,8 @@ export class CloudRun {
         auth: authClient,
         requestBody: service.request,
       };
+      core.info(JSON.stringify(service.request));
+      core.info('---\n');
       serviceResponse = await this.run.namespaces.services.create(
         createServiceRequest,
         this.methodOptions,
