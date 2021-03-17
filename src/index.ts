@@ -62,7 +62,7 @@ async function run (): Promise<void> {
     // Set URL as output
     core.setOutput('url', url);
   } catch (error) {
-    fs.writeFileSync(process.cwd() + '/error-logs.json', error.response.data);
+    fs.writeFileSync(process.cwd() + '/error-logs.json', JSON.stringify(error.response.data));
     core.setFailed(error.message);
   }
 }
