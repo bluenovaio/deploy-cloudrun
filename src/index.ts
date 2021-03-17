@@ -64,7 +64,7 @@ async function run(): Promise<void> {
     core.info('RES_KEYS----\n');
     core.info(JSON.stringify(Object.keys(error.response)));
     core.info('BODY----\n');
-    core.info(JSON.stringify(error.response.body));
+    core.info(JSON.stringify(error.response.data));
     // core.info(JSON.stringify(error.errors));
     core.setFailed(error.message);
   }
