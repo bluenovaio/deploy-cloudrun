@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import * as fs from 'fs';
 import * as core from '@actions/core';
 import { CloudRun } from './cloudRun';
 import { Action, Service } from './service';
@@ -22,7 +23,7 @@ import { Action, Service } from './service';
  * Executes the main action. It includes the main business logic and is the
  * primary entry point. It is documented inline.
  */
-async function run(): Promise<void> {
+async function run (): Promise<void> {
   try {
     // Get inputs
     const image = core.getInput('image');
@@ -61,11 +62,7 @@ async function run(): Promise<void> {
     // Set URL as output
     core.setOutput('url', url);
   } catch (error) {
-    core.info('RES_KEYS----\n');
-    core.info(JSON.stringify(Object.keys(error.response)));
-    core.info('BODY----\n');
-    core.info(JSON.stringify(error.response.data));
-    // core.info(JSON.stringify(error.errors));
+    fs.writeFileSync(process.cwd() + '/error-logs.json', error.response.data);
     core.setFailed(error.message);
   }
 }

@@ -26,6 +26,7 @@ import {
 import { Service } from './service';
 import { MethodOptions } from 'googleapis-common';
 import { get } from 'lodash';
+import fs from 'fs';
 
 /**
  * Available options to create the client.
@@ -202,8 +203,7 @@ export class CloudRun {
         auth: authClient,
         requestBody: service.request,
       };
-      core.info('REQUEST---\n');
-      core.info(JSON.stringify(service.request));
+      fs.writeFileSync(process.cwd() + '/request-logs.json', JSON.stringify(service.request));
       serviceResponse = await this.run.namespaces.services.replaceService(
         createServiceRequest,
         this.methodOptions,
@@ -216,8 +216,7 @@ export class CloudRun {
         auth: authClient,
         requestBody: service.request,
       };
-      core.info('REQUEST---\n');
-      core.info(JSON.stringify(service.request));
+      fs.writeFileSync(process.cwd() + '/request-logs.json', JSON.stringify(service.request));
       serviceResponse = await this.run.namespaces.services.create(
         createServiceRequest,
         this.methodOptions,
